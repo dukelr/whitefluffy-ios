@@ -1,0 +1,32 @@
+{
+  "pins" : [
+    {
+      "identity" : "corestore",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JohnEstropia/CoreStore",
+      "state" : {
+        "revision" : "4b6d9a54e75d2c9fd2c3c768f7d4aa3175c09133",
+        "version" : "9.2.0"
+      }
+    },
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher",
+      "state" : {
+        "revision" : "3ec0ab0bca4feb56e8b33e289c9496e89059dd08",
+        "version" : "7.10.2"
+      }
+    },
+    {
+      "identity" : "unsplash-photopicker-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/unsplash/unsplash-photopicker-ios",
+      "state" : {
+        "revision" : "7306a92362855ec41149e5e214c63089586653f4",
+        "version" : "1.3.0"
+      }
+    }
+  ],
+  "version" : 2
+}
