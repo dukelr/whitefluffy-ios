@@ -17,6 +17,7 @@ final class FavoritePhotosView: UIView {
         let tableView = UITableView().prepareToAutoLayout()
         tableView.separatorStyle = .none
         tableView.rowHeight = UITableView.automaticDimension
+        tableView.backgroundColor = .black
         tableView.register(FavoritePhotoTableViewCell.self)
         return tableView
     }()
@@ -27,6 +28,7 @@ final class FavoritePhotosView: UIView {
         label.font = .boldSystemFont(ofSize: Constant.emptyPlaceholderLabelFontSize)
         label.numberOfLines = .zero
         label.textAlignment = .center
+        label.textColor = .white
         return label
     }()
     

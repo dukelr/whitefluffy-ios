@@ -12,6 +12,7 @@ final class WFWindow {
     
     func configure() {
         window = UIWindow(frame: UIScreen.main.bounds)
+        window?.overrideUserInterfaceStyle = .dark
     }
     
     func setRootViewController(_ viewController: UIViewController) {
