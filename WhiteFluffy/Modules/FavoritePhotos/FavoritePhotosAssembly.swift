@@ -13,8 +13,10 @@ struct FavoritePhotosAssembly: FavoritePhotosAssemblyProtocol {
     func assemble() -> FavoritePhotosViewControllerProtocol {
         let viewController = FavoritePhotosViewController()
         viewController.interactor = FavoritePhotosInteractor(
-            presenter: FavoritePhotosPresenter(viewController: viewController),
-            router: FavoritePhotosRouter(viewController: viewController),
+            presenter: FavoritePhotosPresenter(
+                viewController: viewController,
+                router: WFAssembly.router(viewController: viewController)
+            ),
             photoStorage: WFAssembly.photoStorage
         )
         return viewController

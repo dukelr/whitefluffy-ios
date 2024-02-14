@@ -8,32 +8,31 @@
 import UIKit
 
 private enum Constant {
-    static let galleryButtonTitle = "Show Unsplash Photos"
+    static let emptyPlaceholderLabelText = "No photo available"
 }
 
 final class GalleryView: UIView {
-    let actionHandler: ActionHandler
-    
-    private lazy var galleryButton: UIButton = {
-        let button = UIButton().prepareToAutoLayout()
-        button.setRoundedBorder()
-        button.setTitle(
-            Constant.galleryButtonTitle,
-            for: []
+    private(set) var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = .zero
+        layout.minimumInteritemSpacing = .zero
+        layout.itemSize = CGSize(
+            width: UIScreen.main.bounds.width / 2,
+            height: UIScreen.main.bounds.width / 2
         )
-        button.addAction(
-            UIAction { [weak self] _ in
-                guard let self else { return }
-                
-                actionHandler.galleryButtonAction()
-            },
-            for: .touchUpInside
-        )
-        return button
+        let collectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: layout
+        ).prepareToAutoLayout()
+        collectionView.register(GalleryCollectionViewCell.self)
+        return collectionView
     }()
-
-    init(actionHandler: ActionHandler) {
-        self.actionHandler = actionHandler
+    
+    private(set) var emptyPlaceholderLabel = WFEmptyPlaceholderLabel(text: Constant.emptyPlaceholderLabelText).prepareToAutoLayout()
+    
+    private(set) var loaderView = WFLoaderView().prepareToAutoLayout()
+    
+    init() {
         super.init(frame: .zero)
         setupUI()
     }
@@ -43,20 +42,25 @@ final class GalleryView: UIView {
     private func setupUI() {
         backgroundColor = .black
         
-        addSubview(galleryButton)
-        
-        NSLayoutConstraint.activate([
-            galleryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            galleryButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            galleryButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: WFConstant.Layout.margin),
-            galleryButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -WFConstant.Layout.margin),
-            galleryButton.heightAnchor.constraint(equalToConstant: WFConstant.Layout.buttonHeight)
-        ])
-    }
-}
+        addSubview(collectionView)
+        addSubview(emptyPlaceholderLabel)
+        addSubview(loaderView)
 
-extension GalleryView {
-    struct ActionHandler {
-        let galleryButtonAction: () -> Void
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            emptyPlaceholderLabel.topAnchor.constraint(equalTo: topAnchor),
+            emptyPlaceholderLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            emptyPlaceholderLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            emptyPlaceholderLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            loaderView.topAnchor.constraint(equalTo: topAnchor),
+            loaderView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            loaderView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            loaderView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
 }

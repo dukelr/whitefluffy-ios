@@ -29,7 +29,7 @@ extension WFLocalStorage {
                     PhotoEntity.Property.allCases.forEach {
                         switch $0 {
                         case .id: entity.id = photo.id
-                        case .url: entity.url = photo.url
+                        case .urlString: entity.urlString = photo.urlString
                         case .imageData: entity.imageData = photo.image?.pngData()
                         case .createdAt: entity.createdAt = photo.createdAt
                         case .location: entity.location = photo.location
@@ -62,10 +62,10 @@ extension WFLocalStorage {
                     
                     return  PhotoModel(
                         id: $0.id,
-                        url: $0.url,
+                        urlString: $0.urlString,
                         author: $0.author,
                         location: $0.location,
-                        downloadsCount: Int($0.downloadsCount ?? ""),
+                        downloadsCount: Int($0.downloadsCount) ?? .zero,
                         createdAt: $0.createdAt,
                         image: UIImage(data: imageData),
                         isLiked: $0.isLiked
@@ -86,10 +86,10 @@ extension WFLocalStorage {
                 
                 return PhotoModel(
                     id: entity.id,
-                    url: entity.url,
-                    author: entity.author,
+                    urlString: entity.urlString,
+                    author: entity.author, 
                     location: entity.location,
-                    downloadsCount: Int(entity.downloadsCount ?? ""),
+                    downloadsCount: Int(entity.downloadsCount) ?? .zero,
                     createdAt: entity.createdAt,
                     image: UIImage(data: imageData),
                     isLiked: entity.isLiked

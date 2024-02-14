@@ -9,11 +9,12 @@ import UIKit
 
 struct PhotoModel {
     let id: String
-    let url: URL?
-    let author: String?
-    let location: String?
-    let downloadsCount: Int?
-    let createdAt: String?
+    let urlString: String
+    var url: URL? { URL(string: urlString) }
+    let author: String
+    let location: String
+    let downloadsCount: Int
+    let createdAt: String
     var image: UIImage?
-    var isLiked: Bool
+    var isLiked = false
 }

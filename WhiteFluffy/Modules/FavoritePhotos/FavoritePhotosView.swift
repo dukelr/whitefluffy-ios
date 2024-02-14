@@ -9,7 +9,6 @@ import UIKit
 
 private enum Constant {
     static let emptyPlaceholderLabelText = "No favorite photos"
-    static let emptyPlaceholderLabelFontSize: CGFloat = 24
 }
 
 final class FavoritePhotosView: UIView {
@@ -22,16 +21,8 @@ final class FavoritePhotosView: UIView {
         return tableView
     }()
     
-    private(set) var emptyPlaceholderLabel: UILabel = {
-        let label = UILabel().prepareToAutoLayout()
-        label.text = Constant.emptyPlaceholderLabelText
-        label.font = .boldSystemFont(ofSize: Constant.emptyPlaceholderLabelFontSize)
-        label.numberOfLines = .zero
-        label.textAlignment = .center
-        label.textColor = .white
-        return label
-    }()
-    
+    private(set) var emptyPlaceholderLabel = WFEmptyPlaceholderLabel(text: Constant.emptyPlaceholderLabelText).prepareToAutoLayout()
+        
     init() {
         super.init(frame: .zero)
         setupUI()
@@ -57,7 +48,7 @@ final class FavoritePhotosView: UIView {
             emptyPlaceholderLabel.topAnchor.constraint(equalTo: topAnchor),
             emptyPlaceholderLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             emptyPlaceholderLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            emptyPlaceholderLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
+            emptyPlaceholderLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
 }

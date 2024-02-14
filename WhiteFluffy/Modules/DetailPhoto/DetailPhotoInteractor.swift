@@ -13,9 +13,8 @@ protocol DetailPhotoInteractorProtocol {
 
 final class DetailPhotoInteractor: DetailPhotoInteractorProtocol {
     private let presenter: DetailPhotoPresenterProtocol
-    private let router: DetailPhotoRouterProtocol
     private let photoStorage: WFPhotoStorageProtocol
-    private let photoLoader: WFPhotoLoaderProtocol
+    private let imageLoader: WFWFImageLoaderProtocol
     private var model: PhotoModel {
         didSet {
             presenter.updateDetailPhoto(model: model)
@@ -24,33 +23,22 @@ final class DetailPhotoInteractor: DetailPhotoInteractorProtocol {
 
     init(
         presenter: DetailPhotoPresenterProtocol,
-        router: DetailPhotoRouterProtocol,
         photoStorage: WFPhotoStorageProtocol,
-        photoLoader: WFPhotoLoaderProtocol,
+        imageLoader: WFWFImageLoaderProtocol,
         model: PhotoModel
     ) {
         self.presenter = presenter
-        self.router = router
         self.photoStorage = photoStorage
-        self.photoLoader = photoLoader
+        self.imageLoader = imageLoader
         self.model = model
     }
 
     func activate() {
-        presenter.showLoader(true)
-        photoLoader.load(url: model.url) { [weak self] image in
-            defer { self?.presenter.showLoader(false) }
-            
-            guard let self, let image else {
-                self?.presenter.showAlert(.failedImage) { [weak self] _ in
-                    guard let self else { return }
-                    
-                    router.close()
-                }
-                return
-            }
-            model.image = image
+        guard let photo = try? photoStorage.getPhoto(id: model.id) else {
+            validatePhotoImage()
+            return
         }
+        model = photo
     }
     
     func didChangePhotoCount() {
@@ -68,6 +56,31 @@ final class DetailPhotoInteractor: DetailPhotoInteractorProtocol {
             photoStorage.savePhoto(model)
         } else {
             photoStorage.deletePhoto(model.id)
+        }
+    }
+    
+    private func validatePhotoImage() {
+        guard model.image != nil else {
+            loadImage()
+            return
+        }
+        presenter.updateDetailPhoto(model: model)
+    }
+    
+    private func loadImage() {
+        presenter.showLoader(true)
+        imageLoader.startLoading(url: model.url) { [weak self] image in
+            defer { self?.presenter.showLoader(false) }
+            
+            guard let self, let image else {
+                self?.presenter.showAlert(.failedImage) { [weak self] _ in
+                    guard let self else { return }
+                    
+                    presenter.showGallery()
+                }
+                return
+            }
+            model.image = image
         }
     }
 }

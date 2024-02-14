@@ -1,5 +1,5 @@
 //
-//  WFPhotoLoader.swift
+//  WFImageLoader.swift
 //  WhiteFluffy
 //
 //  Created by duke on 2/9/24.
@@ -8,17 +8,17 @@
 import UIKit
 import Kingfisher
 
-protocol WFPhotoLoaderProtocol {
-    func load(
+protocol WFWFImageLoaderProtocol {
+    func startLoading(
         url: URL?,
         completion: ((UIImage?) -> Void)?
     )
 }
 
-final class WFPhotoLoader: WFPhotoLoaderProtocol {
+final class WFImageLoader: WFWFImageLoaderProtocol {
     private let kingfisher = KingfisherManager.shared
     
-    func load(
+    func startLoading(
         url: URL?,
         completion: ((UIImage?) -> Void)?
     ) {
@@ -34,7 +34,7 @@ final class WFPhotoLoader: WFPhotoLoaderProtocol {
                 completion?(UIImage(data: data))
                 
             case .failure(let error):
-                print("[WFPhotoLoader] Failed to load photo: \(error.localizedDescription))")
+                print("[WFImageLoader] Failed to load photo: \(error.localizedDescription))")
                 completion?(nil)
             }
         }

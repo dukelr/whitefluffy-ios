@@ -9,7 +9,7 @@ import UIKit
 
 protocol DetailPhotoViewControllerProtocol: UIViewController {
     func setupModel(_ model: PhotoModel)
-    func setupActivityIndicatorView(isAnimating: Bool)
+    func setupLoaderView(isAnimating: Bool)
 }
 
 private enum Constant {
@@ -23,12 +23,7 @@ final class DetailPhotoViewController: UIViewController {
     
     // MARK: - Properties
 
-    private let contentView = DetailPhotoView()
-    private var model: PhotoModel? {
-        didSet {
-            contentView.tableView.reloadData()
-        }
-    }
+    private lazy var contentView = DetailPhotoView(actionHandler: setupActionHandler())
     private let notificationCenter = NotificationCenter.default
 
     // MARK: - Lifecycle funcs
@@ -46,10 +41,9 @@ final class DetailPhotoViewController: UIViewController {
     // MARK: - Setup funcs
 
     private func setupUI() {
-        contentView.tableView.dataSource = self
-        contentView.tableView.delegate = self
-        
         title = Constant.title
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: contentView.likeButton)
+
         notificationCenter.addObserver(
             forName: .didChangePhotoCount,
             object: nil,
@@ -60,52 +54,31 @@ final class DetailPhotoViewController: UIViewController {
             interactor.didChangePhotoCount()
         }
     }
+    
+    private func setupActionHandler() -> DetailPhotoView.ActionHandler {
+        DetailPhotoView.ActionHandler(
+            likeButtonAction: { [weak self] in
+                guard let self else { return }
+                
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                interactor.didTapLikeButton()
+            }
+        )
+    }
 }
 
 // MARK: - DetailPhotoViewControllerProtocol
 
 extension DetailPhotoViewController: DetailPhotoViewControllerProtocol {
     func setupModel(_ model: PhotoModel) {
-        self.model = model
+        contentView.setViews(model: model)
     }
     
-    func setupActivityIndicatorView(isAnimating: Bool) {
+    func setupLoaderView(isAnimating: Bool) {
         if isAnimating {
-            contentView.activityIndicatorView.startAnimating()
+            contentView.loaderView.startLoading()
         } else {
-            contentView.activityIndicatorView.stopAnimating()
+            contentView.loaderView.stopLoading()
         }
-    }
-}
-
-// MARK: - UITableViewDelegate
-
-extension DetailPhotoViewController: UITableViewDelegate {}
-
-// MARK: - DetailPhotoViewControllerProtocol
-
-extension DetailPhotoViewController: UITableViewDataSource {
-    func tableView(
-        _ tableView: UITableView,
-        numberOfRowsInSection section: Int
-    ) -> Int {
-        1
-    }
-    
-    func tableView(
-        _ tableView: UITableView,
-        cellForRowAt indexPath: IndexPath
-    ) -> UITableViewCell {
-        guard let model, let cell = tableView.dequeueReusableCell(
-            withIdentifier: DetailPhotoTableViewCell.identifier,
-            for: indexPath
-        ) as? DetailPhotoTableViewCell else { return UITableViewCell() }
-        
-        cell.configure(model: model) { [weak self] in
-            guard let self else { return }
-            
-            interactor.didTapLikeButton()
-        }
-        return cell
     }
 }

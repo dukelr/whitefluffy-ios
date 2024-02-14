@@ -19,7 +19,7 @@ final class FavoritePhotosViewController: UIViewController {
 
     // MARK: - Properties
 
-    private lazy var contentView = FavoritePhotosView()
+    private let contentView = FavoritePhotosView()
     private var models: [PhotoModel]? {
         didSet {
             guard let models else { return }
@@ -44,7 +44,7 @@ final class FavoritePhotosViewController: UIViewController {
 
     // MARK: - Setup funcs
 
-    private func setupUI() {
+    private func setupUI() {        
         contentView.tableView.dataSource = self
         contentView.tableView.delegate = self
         

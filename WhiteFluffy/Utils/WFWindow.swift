@@ -20,4 +20,3 @@ final class WFWindow {
         window?.makeKeyAndVisible()
     }
 }
-

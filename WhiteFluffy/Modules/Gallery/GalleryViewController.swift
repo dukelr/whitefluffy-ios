@@ -6,9 +6,11 @@
 //
 
 import UIKit
-import UnsplashPhotoPicker
 
-protocol GalleryViewControllerProtocol: UIViewController {}
+protocol GalleryViewControllerProtocol: UIViewController {
+    func setupModels(_ models: [PhotoModel])
+    func setupLoaderView(isAnimating: Bool)
+}
 
 final class GalleryViewController: UIViewController {
     // MARK: - Dependencies
@@ -17,7 +19,13 @@ final class GalleryViewController: UIViewController {
     
     // MARK: - Properties
 
-    private lazy var contentView = GalleryView(actionHandler: setupActionHandler())
+    private let contentView = GalleryView()
+    private var models: [PhotoModel]? {
+        didSet {
+            contentView.emptyPlaceholderLabel.isHidden = !(models?.isEmpty == true)
+            contentView.collectionView.reloadData()
+        }
+    }
     
     // MARK: - Lifecycle funcs
 
@@ -33,38 +41,71 @@ final class GalleryViewController: UIViewController {
 
     // MARK: - Setup funcs
 
-    private func setupUI() {}
-    
-    private func setupActionHandler() -> GalleryView.ActionHandler {
-        GalleryView.ActionHandler(
-            galleryButtonAction: { [weak self] in
-                guard let self else { return }
-                
-                interactor.didTapGalleryButton()
-            }
-        )
+    private func setupUI() {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchBar.delegate = self
+        navigationItem.searchController = searchController
+        
+        contentView.collectionView.delegate = self
+        contentView.collectionView.dataSource = self
     }
 }
 
 // MARK: - GalleryViewControllerProtocol
 
-extension GalleryViewController: GalleryViewControllerProtocol {}
-
-// MARK: - UnsplashPhotoPickerDelegate
-
-extension GalleryViewController: UnsplashPhotoPickerDelegate {
-    func unsplashPhotoPicker(
-        _ photoPicker: UnsplashPhotoPicker,
-        didSelectPhotos photos: [UnsplashPhoto]
-    ) {
-        guard let photo = photos.first else { return }
-        
-        interactor.didSelectPhoto(photo)
+extension GalleryViewController: GalleryViewControllerProtocol {
+    func setupModels(_ models: [PhotoModel]) {
+        self.models = models
     }
     
-    func unsplashPhotoPickerDidCancel(
-        _ photoPicker: UnsplashPhotoPicker
-    ) {
+    func setupLoaderView(isAnimating: Bool) {
+        if isAnimating {
+            contentView.loaderView.startLoading()
+        } else {
+            contentView.loaderView.stopLoading()
+        }
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+
+extension GalleryViewController: UICollectionViewDataSource {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        models?.count ?? .zero
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let models, let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: GalleryCollectionViewCell.identifier,
+            for: indexPath
+        ) as? GalleryCollectionViewCell else { return UICollectionViewCell() }
         
+        cell.configure(model: models[indexPath.item])
+        return cell
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension GalleryViewController: UICollectionViewDelegate {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        interactor.didSelectPhoto(index: indexPath.item)
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension GalleryViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        interactor.didTapSearchButton(text: searchBar.text)
     }
 }

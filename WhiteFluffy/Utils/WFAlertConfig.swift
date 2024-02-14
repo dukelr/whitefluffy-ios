@@ -13,23 +13,25 @@ extension WFAlertConfig {
     enum Common: AlertConfigurable {
         case unknownError
         case networkIssue
+        case serverIssue
                 
         var title: String {
             switch self {
-            case .unknownError,.networkIssue: "Ошибка"
+            case .unknownError,.networkIssue, .serverIssue: "Error"
             }
         }
         
         var message: String? {
             switch self {
-            case .unknownError: "Произошла неизвестная ошибка"
-            case .networkIssue: "Отсутствует подключение к сети интернет"
+            case .unknownError: "An unknown error occurred"
+            case .networkIssue: "An internet error occurred. Please check your network connection"
+            case .serverIssue: "A server error occurred"
             }
         }
         
         func actions(handler: ((UIAlertAction) -> Void)?) -> [UIAlertAction] {
             switch self {
-            case .unknownError, .networkIssue: [defaultAction(handler: handler)]
+            case .unknownError, .networkIssue, .serverIssue: [defaultAction(handler: handler)]
             }
         }
     }
@@ -43,14 +45,14 @@ extension WFAlertConfig {
         var title: String {
             switch self {
             case .common(let config): config.title
-            case .failedImage: "Ошибка"
+            case .failedImage: "Error"
             }
         }
         
         var message: String? {
             switch self {
             case .common(let config): config.message
-            case .failedImage: "Неудалось загрузить фото"
+            case .failedImage: "Failed to load image"
             }
         }
         

@@ -8,8 +8,7 @@
 import UIKit
 
 private enum Constant {
-    static let photoImageViewHeight: CGFloat = 150
-    static let authorLabelText = "Author: "
+    static let photoImageViewHeight: CGFloat = 100
 }
 
 final class FavoritePhotoTableViewCell: UITableViewCell {
@@ -58,39 +57,39 @@ final class FavoritePhotoTableViewCell: UITableViewCell {
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.leadingAnchor.constraint(
                 equalTo: contentView.leadingAnchor,
-                constant: WFConstant.Layout.margin
+                constant: WFConstant.Layout.margin / 2
             ),
             containerView.trailingAnchor.constraint(
                 equalTo: contentView.trailingAnchor,
-                constant: -WFConstant.Layout.margin
+                constant: -WFConstant.Layout.margin / 2
             ),
             containerView.bottomAnchor.constraint(
                 equalTo: contentView.bottomAnchor,
-                constant: -WFConstant.Layout.margin
+                constant: -WFConstant.Layout.margin / 2
             ),
             photoImageView.topAnchor.constraint(
                 equalTo: containerView.topAnchor,
-                constant: WFConstant.Layout.margin
+                constant: WFConstant.Layout.margin / 2
             ),
             photoImageView.leadingAnchor.constraint(
                 equalTo: containerView.leadingAnchor,
-                constant: WFConstant.Layout.margin
+                constant: WFConstant.Layout.margin / 2
             ),
-            photoImageView.trailingAnchor.constraint(equalTo: containerView.centerXAnchor),
             photoImageView.bottomAnchor.constraint(
                 equalTo: containerView.bottomAnchor,
-                constant: -WFConstant.Layout.margin
+                constant: -WFConstant.Layout.margin / 2
             ),
             photoImageView.heightAnchor.constraint(equalToConstant: Constant.photoImageViewHeight),
+            photoImageView.widthAnchor.constraint(equalToConstant: Constant.photoImageViewHeight),
 
             authorLabel.topAnchor.constraint(equalTo: photoImageView.topAnchor),
             authorLabel.leadingAnchor.constraint(
                 equalTo: photoImageView.trailingAnchor,
-                constant: WFConstant.Layout.margin
+                constant: WFConstant.Layout.margin / 2
             ),
             authorLabel.trailingAnchor.constraint(
                 equalTo: containerView.trailingAnchor,
-                constant: -WFConstant.Layout.margin
+                constant: -WFConstant.Layout.margin / 2
                 
             ),
             authorLabel.bottomAnchor.constraint(equalTo: photoImageView.bottomAnchor),
@@ -99,9 +98,6 @@ final class FavoritePhotoTableViewCell: UITableViewCell {
     
     func configure(model: PhotoModel) {
         photoImageView.image = model.image
-        
-        if let author = model.author {
-            authorLabel.text = Constant.authorLabelText + author
-        }
+        authorLabel.text = model.author
     }
 }

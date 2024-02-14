@@ -13,21 +13,21 @@ public class PhotoEntity: NSManagedObject {
     @NSManaged
     public var id: String
     @NSManaged
-    public var url: URL?
+    public var urlString: String
     @NSManaged
     public var imageData: Data?
     @NSManaged
-    public var createdAt: String?
+    public var createdAt: String
     @NSManaged
-    public var location: String?
+    public var location: String
     @NSManaged
-    public var author: String?
+    public var author: String
     @NSManaged
-    public var downloadsCount: String?
+    public var downloadsCount: String
+    @NSManaged
+    public var photoDescription: String
     @NSManaged
     public var isLiked: Bool
-
-
 }
 
 extension PhotoEntity: Identifiable {}
@@ -35,12 +35,13 @@ extension PhotoEntity: Identifiable {}
 extension PhotoEntity {
     enum Property: CaseIterable {
         case id
-        case url
+        case urlString
         case imageData
         case createdAt
         case location
         case author
         case downloadsCount
+        case description
         case isLiked
     }
 }

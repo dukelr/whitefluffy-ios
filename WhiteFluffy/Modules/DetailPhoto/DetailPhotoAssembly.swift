@@ -13,10 +13,12 @@ struct DetailPhotoAssembly: DetailPhotoAssemblyProtocol {
     func assemble(photo: PhotoModel) -> DetailPhotoViewControllerProtocol {
         let viewController = DetailPhotoViewController()
         viewController.interactor = DetailPhotoInteractor(
-            presenter: DetailPhotoPresenter(viewController: viewController),
-            router: DetailPhotoRouter(viewController: viewController),
+            presenter: DetailPhotoPresenter(
+                viewController: viewController,
+                router: WFAssembly.router(viewController: viewController)
+            ),
             photoStorage: WFAssembly.photoStorage,
-            photoLoader: WFAssembly.photoLoader,
+            imageLoader: WFAssembly.imageLoader,
             model: photo
         )
         return viewController

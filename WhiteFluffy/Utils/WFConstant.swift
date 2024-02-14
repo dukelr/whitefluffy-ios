@@ -12,8 +12,6 @@ enum WFConstant {}
 extension WFConstant {
     enum Layout {
         static let margin: CGFloat = 16
-        
-        static let buttonHeight: CGFloat = 40
     }
 }
 

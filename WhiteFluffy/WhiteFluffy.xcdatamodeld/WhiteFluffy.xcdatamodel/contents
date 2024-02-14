@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22225" systemVersion="23C64" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="PhotoEntity" representedClassName="PhotoEntity" syncable="YES">
-        <attribute name="author" optional="YES" attributeType="String"/>
-        <attribute name="createdAt" optional="YES" attributeType="String"/>
-        <attribute name="downloadsCount" optional="YES" attributeType="String"/>
+        <attribute name="author" attributeType="String"/>
+        <attribute name="createdAt" attributeType="String"/>
+        <attribute name="downloadsCount" attributeType="String"/>
         <attribute name="id" attributeType="String"/>
         <attribute name="imageData" optional="YES" attributeType="Binary"/>
         <attribute name="isLiked" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="location" optional="YES" attributeType="String"/>
-        <attribute name="url" optional="YES" attributeType="URI"/>
+        <attribute name="location" attributeType="String"/>
+        <attribute name="urlString" attributeType="String"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>

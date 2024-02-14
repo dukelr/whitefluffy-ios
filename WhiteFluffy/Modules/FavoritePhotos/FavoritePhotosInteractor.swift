@@ -13,7 +13,6 @@ protocol FavoritePhotosInteractorProtocol {
 
 final class FavoritePhotosInteractor: FavoritePhotosInteractorProtocol {
     private let presenter: FavoritePhotosPresenterProtocol
-    private let router: FavoritePhotosRouterProtocol
     private let photoStorage: WFPhotoStorageProtocol
     
     private var models: [PhotoModel]? {
@@ -26,25 +25,34 @@ final class FavoritePhotosInteractor: FavoritePhotosInteractorProtocol {
     
     init(
         presenter: FavoritePhotosPresenterProtocol,
-        router: FavoritePhotosRouterProtocol,
         photoStorage: WFPhotoStorageProtocol
     ) {
         self.presenter = presenter
-        self.router = router
         self.photoStorage = photoStorage
     }
     
     func activate() {
-        models = try? photoStorage.getPhotos()
+        getPhotos()
     }
     
     func didChangePhotoCount() {
-        models = try? photoStorage.getPhotos()
+        getPhotos()
+    }
+    
+    func getPhotos() {
+        do {
+            models = try photoStorage.getPhotos()
+        } catch {
+            presenter.showAlert(
+                .unknownError,
+                handler: nil
+            )
+        }
     }
     
     func didSelectPhoto(index: Int) {
         guard let models else { return }
         
-        router.routeToDetailPhoto(photo: models[index])
+        presenter.showDetailPhoto(models[index])
     }
 }

@@ -6,14 +6,9 @@ protocol ___VARIABLE_productName:identifier___InteractorProtocol {
 
 final class ___VARIABLE_productName:identifier___Interactor: ___VARIABLE_productName:identifier___InteractorProtocol {
     private let presenter: ___VARIABLE_productName:identifier___PresenterProtocol
-    private let router: ___VARIABLE_productName:identifier___RouterProtocol
 
-    init(
-        presenter: ___VARIABLE_productName:identifier___PresenterProtocol,
-        router: ___VARIABLE_productName:identifier___RouterProtocol
-    ) {
+    init(presenter: ___VARIABLE_productName:identifier___PresenterProtocol) {
         self.presenter = presenter
-        self.router = router
     }
 
     func activate() {}

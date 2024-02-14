@@ -14,13 +14,19 @@ protocol DetailPhotoPresenterProtocol {
         _ config: WFAlertConfig.DetailPhoto,
         handler: ((UIAlertAction) -> Void)?
     )
+    func showGallery()
 }
 
 struct DetailPhotoPresenter: DetailPhotoPresenterProtocol {
     private weak var viewController: DetailPhotoViewControllerProtocol?
+    private let router: WFRouterProtocol
 
-    init(viewController: DetailPhotoViewControllerProtocol) {
+    init(
+        viewController: DetailPhotoViewControllerProtocol,
+        router: WFRouterProtocol
+    ) {
         self.viewController = viewController
+        self.router = router
     }
     
     func updateDetailPhoto(model: PhotoModel) {
@@ -28,13 +34,23 @@ struct DetailPhotoPresenter: DetailPhotoPresenterProtocol {
     }
     
     func showLoader(_ shows: Bool) {
-        viewController?.setupActivityIndicatorView(isAnimating: shows)
+        viewController?.setupLoaderView(isAnimating: shows)
     }
     
     func showAlert(
         _ config: WFAlertConfig.DetailPhoto,
         handler: ((UIAlertAction) -> Void)?
     ) {
-        
+        viewController?.present(
+            UIAlertController(
+                config: config,
+                handler: handler
+            ),
+            animated: true
+        )
+    }
+    
+    func showGallery() {
+        router.close()
     }
 }
