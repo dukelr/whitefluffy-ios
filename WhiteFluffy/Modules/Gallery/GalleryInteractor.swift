@@ -59,7 +59,8 @@ final class GalleryInteractor: GalleryInteractorProtocol {
                 models?[index] = photo
             } else {
                 imageLoader.startLoading(url: model.url) { [weak self] in
-                    guard let self else { return }
+                    guard let self, models?.contains(where: { $0.id == model.id }) == true,
+                          let index = models?.firstIndex(where: { $0.id == model.id }) else  { return }
                     
                     models?[index].image = $0
                 }
@@ -73,7 +74,7 @@ final class GalleryInteractor: GalleryInteractorProtocol {
             defer { self?.presenter.showLoader(false) }
 
             guard let self else { return }
-                        
+    
             switch $0 {
             case .success(let photos):
                 models = photos
@@ -98,6 +99,13 @@ final class GalleryInteractor: GalleryInteractorProtocol {
                 models = photos
                 loadPhotos()
                 
+                if !photos.isEmpty {
+                    presenter.scrollToPhoto(
+                        index: .zero,
+                        position: .top,
+                        animated: false
+                    )
+                }
             case .failure(let error):
                 models = []
                 handleBackendError(error)

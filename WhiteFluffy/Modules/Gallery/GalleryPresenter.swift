@@ -9,6 +9,11 @@ import UIKit
 
 protocol GalleryPresenterProtocol {
     func updatePhotos(models: [PhotoModel])
+    func scrollToPhoto(
+        index: Int,
+        position: UICollectionView.ScrollPosition,
+        animated: Bool
+    )
     func showLoader(_ shows: Bool)
     func showAlert(
         _ config: WFAlertConfig.Common,
@@ -31,6 +36,18 @@ struct GalleryPresenter: GalleryPresenterProtocol {
     
     func updatePhotos(models: [PhotoModel]) {
         viewController?.setupModels(models)
+    }
+    
+    func scrollToPhoto(
+        index: Int,
+        position: UICollectionView.ScrollPosition,
+        animated: Bool
+    ) {
+        viewController?.scrollToItem(
+            index: index,
+            position: position,
+            animated: animated
+        )
     }
     
     func showLoader(_ shows: Bool) {

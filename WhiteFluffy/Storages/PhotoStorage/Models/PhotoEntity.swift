@@ -25,8 +25,6 @@ public class PhotoEntity: NSManagedObject {
     @NSManaged
     public var downloadsCount: String
     @NSManaged
-    public var photoDescription: String
-    @NSManaged
     public var isLiked: Bool
 }
 
@@ -41,7 +39,6 @@ extension PhotoEntity {
         case location
         case author
         case downloadsCount
-        case description
         case isLiked
     }
 }

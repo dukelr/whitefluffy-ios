@@ -10,6 +10,11 @@ import UIKit
 protocol GalleryViewControllerProtocol: UIViewController {
     func setupModels(_ models: [PhotoModel])
     func setupLoaderView(isAnimating: Bool)
+    func scrollToItem(
+        index: Int,
+        position: UICollectionView.ScrollPosition,
+        animated: Bool
+    )
 }
 
 final class GalleryViewController: UIViewController {
@@ -58,6 +63,21 @@ extension GalleryViewController: GalleryViewControllerProtocol {
         self.models = models
     }
     
+    func scrollToItem(
+        index: Int,
+        position: UICollectionView.ScrollPosition,
+        animated: Bool
+    ) {
+        contentView.collectionView.scrollToItem(
+            at: IndexPath(
+                item: index,
+                section: .zero
+            ),
+            at: position,
+            animated: animated
+        )
+    }
+    
     func setupLoaderView(isAnimating: Bool) {
         if isAnimating {
             contentView.loaderView.startLoading()
@@ -102,7 +122,7 @@ extension GalleryViewController: UICollectionViewDelegate {
     }
 }
 
-// MARK: - UICollectionViewDelegate
+// MARK: - UISearchBarDelegate
 
 extension GalleryViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

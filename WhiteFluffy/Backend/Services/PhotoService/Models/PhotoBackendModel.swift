@@ -15,7 +15,6 @@ struct PhotoBackendModel: Decodable {
     let id: String
     let user: User
     let urls: URLType
-    let description: String?
     let location: Location?
     let downloads: Int?
     let createdAt: String
